@@ -15,7 +15,7 @@ const SavedBooks = () => {
     variables: { userId: Auth.getProfile().data._id }
   });
   let deletedBookId;
-  const [ deleteBook, {error, data}] = useMutation(DELETE_BOOK, {
+  const [ deleteBook, {error, data}] = useMutation(REMOVE_BOOK, {
     update(cache, {data: {removeBookId}}) {
       try {
         const { getSingleUser } = cache.readQuery({ query: QUERY_SAVED });
@@ -44,12 +44,13 @@ const SavedBooks = () => {
     }
 
     try {
-      const { data } = await removeBook({
-        variables: { bookId },
+      const { data } = await deleteBook({
+        variables: { userId: Auth.getProfile().data._id, bookId },
       });
 
       // upon success, remove book's id from localStorage
       removeBookId(bookId);
+      deletedBookId = bookId;
     } catch (err) {
       console.error(err);
     }

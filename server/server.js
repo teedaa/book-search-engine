@@ -5,21 +5,19 @@ const db = require('./config/connection');
 const routes = require('./routes');
 
 
-const { typeDefs, resovlers } = require('./schemas');
+const { typeDefs, resolvers } = require('./schemas');
 const { authMiddleware } = require('./utils/auth');
 const { Server } = require('http');
 const app = express();
 const PORT = process.env.PORT || 3001;
 
 //create instance of apollo server
-const servcer = new ApolloSercver({
+const server = new ApolloServer({
   typeDefs,
   resolvers,
   context: authMiddleware
 });
-
-Server.applyMiddleware({ app});
-
+server.applyMiddleware({ app });
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
